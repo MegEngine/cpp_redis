@@ -23,6 +23,7 @@
 #include <cpp_redis/core/sentinel.hpp>
 #include <cpp_redis/misc/error.hpp>
 #include <cpp_redis/misc/logger.hpp>
+#include <cpp_redis/misc/macro.hpp>
 #include <cpp_redis/network/redis_connection.hpp>
 
 namespace cpp_redis {
@@ -66,12 +67,12 @@ sentinel::get_master_addr_by_name(const std::string& name, std::string& host, st
 
   //! we must have some sentinels to connect to if we are in autoconnect mode
   if (autoconnect && m_sentinels.size() == 0) {
-    throw redis_error("No sentinels available. Call add_sentinel() before get_master_addr_by_name()");
+    cpp_redis_throw_raw(redis_error("No sentinels available. Call add_sentinel() before get_master_addr_by_name()"));
   }
 
   //! if we are not connected and we are not in autoconnect mode, we can't go further in the process
   if (!autoconnect && !is_connected()) {
-    throw redis_error("No sentinel connected. Call connect() first or enable autoconnect.");
+    cpp_redis_throw_raw(redis_error("No sentinel connected. Call connect() first or enable autoconnect."));
   }
 
   if (autoconnect) {
@@ -111,7 +112,7 @@ sentinel::get_master_addr_by_name(const std::string& name, std::string& host, st
 void
 sentinel::connect_sentinel(const sentinel_disconnect_handler_t& sentinel_disconnect_handler) {
   if (m_sentinels.size() == 0) {
-    throw redis_error("No sentinels available. Call add_sentinel() before connect_sentinel()");
+    cpp_redis_throw_raw(redis_error("No sentinels available. Call add_sentinel() before connect_sentinel()"));
   }
 
   auto disconnect_handler = std::bind(&sentinel::connection_disconnect_handler, this, std::placeholders::_1);
@@ -143,7 +144,7 @@ sentinel::connect_sentinel(const sentinel_disconnect_handler_t& sentinel_disconn
   }
 
   if (not_connected) {
-    throw redis_error("Unable to connect to any sentinels");
+    cpp_redis_throw_raw(redis_error("Unable to connect to any sentinels"));
   }
 
   m_disconnect_handler = sentinel_disconnect_handler;

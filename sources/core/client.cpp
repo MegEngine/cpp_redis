@@ -83,7 +83,7 @@ namespace cpp_redis {
 		if (m_sentinel.get_master_addr_by_name(name, m_redis_server, m_redis_port, true)) {
 			connect(m_redis_server, m_redis_port, connect_callback, timeout_ms, max_reconnects, reconnect_interval_ms);
 		} else {
-			throw redis_error("cpp_redis::client::connect() could not find master for m_name " + name);
+			cpp_redis_throw_raw(redis_error("cpp_redis::client::connect() could not find master for m_name " + name));
 		}
 	}
 

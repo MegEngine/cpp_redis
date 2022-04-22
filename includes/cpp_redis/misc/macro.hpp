@@ -29,3 +29,16 @@
 #endif                                                           /* _WIN32 */
 
 #define __CPP_REDIS_PRINT(...) printf(__VA_ARGS__)
+
+#if CPP_REDIS_ENABLE_EXCEPTION
+#if !__cpp_exceptions && !__EXCEPTIONS
+#undef CPP_REDIS_ENABLE_EXCEPTION
+#define CPP_REDIS_ENABLE_EXCEPTION 0
+#endif
+#endif
+
+#if CPP_REDIS_ENABLE_EXCEPTION
+#define cpp_redis_throw_raw(_exc...) throw _exc
+#else
+#define cpp_redis_throw_raw(_exc...) __builtin_trap()
+#endif

@@ -21,6 +21,7 @@
 // SOFTWARE.#include "consumer.hpp"
 
 #include <cpp_redis/core/consumer.hpp>
+#include <cpp_redis/misc/macro.hpp>
 
 #include <functional>
 
@@ -139,7 +140,7 @@ namespace cpp_redis {
 											__CPP_REDIS_LOG(1,
 											                "Processing failed for message id: " + m.get_id() +
 											                "\nDetails: " + exc.what());
-											throw exc;
+											cpp_redis_throw_raw(exc);
 										}
 									}
 								}

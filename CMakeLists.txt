@@ -44,6 +44,8 @@ project(${PROJECT} CXX)
 ###
 # compilation options
 ###
+option(CPP_REDIS_ENABLE_EXCEPTIONS "Build with exceptions" ON)
+
 if (MSVC)
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W3 /O2 /bigobj")
 
@@ -71,6 +73,12 @@ if (MSVC)
 else ()
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -W -Wall -Wextra -O3")
 endif ()
+
+if(NOT CPP_REDIS_ENABLE_EXCEPTIONS)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-exceptions")
+endif()
+
+set(CPP_REDIS_ENABLE_EXCEPTION ${CPP_REDIS_ENABLE_EXCEPTIONS})
 
 
 ###

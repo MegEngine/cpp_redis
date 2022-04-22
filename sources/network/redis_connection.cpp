@@ -22,6 +22,7 @@
 
 #include <cpp_redis/misc/error.hpp>
 #include <cpp_redis/misc/logger.hpp>
+#include <cpp_redis/misc/macro.hpp>
 #include <cpp_redis/network/redis_connection.hpp>
 
 #ifndef __CPP_REDIS_USE_CUSTOM_TCP_CLIENT
@@ -78,7 +79,7 @@ namespace cpp_redis {
 			}
 			catch (const std::exception &e) {
 				__CPP_REDIS_LOG(error, std::string("cpp_redis::network::redis_connection ") + e.what());
-				throw redis_error(e.what());
+				cpp_redis_throw_raw(redis_error(e.what()));
 			}
 
 			m_reply_callback = client_reply_callback;
@@ -150,7 +151,7 @@ namespace cpp_redis {
 			}
 			catch (const std::exception &e) {
 				__CPP_REDIS_LOG(error, std::string("cpp_redis::network::redis_connection ") + e.what());
-				throw redis_error(e.what());
+				cpp_redis_throw_raw(redis_error(e.what()));
 			}
 
 			__CPP_REDIS_LOG(debug, "cpp_redis::network::redis_connection sent pipelined commands");

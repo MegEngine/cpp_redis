@@ -1,3 +1,5 @@
+load("@//tools/toolchain:toolchain.bzl", "if_opt", "if_not_opt")
+
 cc_library(
     name = "cpp_redis",
     srcs = [
@@ -53,6 +55,11 @@ cc_library(
     strip_include_prefix = "includes",
     visibility = ["//visibility:public"],
     deps = ["@tacopie"],
+    defines = if_opt([
+        "CPP_REDIS_ENABLE_EXCEPTION=0"
+    ]) + if_not_opt([
+        "CPP_REDIS_ENABLE_EXCEPTION=1"
+    ]),
 )
 
 cc_binary(
