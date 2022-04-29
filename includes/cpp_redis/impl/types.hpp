@@ -27,6 +27,7 @@
 #include <cpp_redis/core/reply.hpp>
 #include <cpp_redis/misc/convert.hpp>
 #include <cpp_redis/misc/logger.hpp>
+#include <cpp_redis/misc/macro.hpp>
 #include <cpp_redis/misc/optional.hpp>
 #include <sstream>
 #include <string>
@@ -103,7 +104,7 @@ public:
     if (it != m_values.end())
       return it->second;
     else
-      throw "value not found";
+      cpp_redis_throw_raw("value not found");
   };
 
   inline message_type&

@@ -23,6 +23,7 @@
 #include <cpp_redis/core/reply.hpp>
 #include <cpp_redis/misc/error.hpp>
 #include <cpp_redis/misc/logger.hpp>
+#include <cpp_redis/misc/macro.hpp>
 
 namespace cpp_redis {
 
@@ -79,7 +80,7 @@ namespace cpp_redis {
 	const std::string &
 	reply::error() const {
 		if (!is_error())
-			throw cpp_redis::redis_error("Reply is not an error");
+			cpp_redis_throw_raw(cpp_redis::redis_error("Reply is not an error"));
 
 		return as_string();
 	}
@@ -157,7 +158,7 @@ namespace cpp_redis {
 	const std::vector<reply> &
 	reply::as_array() const {
 		if (!is_array())
-			throw cpp_redis::redis_error("Reply is not an array");
+			cpp_redis_throw_raw(cpp_redis::redis_error("Reply is not an array"));
 
 		return m_rows;
 	}
@@ -165,7 +166,7 @@ namespace cpp_redis {
 	const std::string &
 	reply::as_string() const {
 		if (!is_string())
-			throw cpp_redis::redis_error("Reply is not a string");
+			cpp_redis_throw_raw(cpp_redis::redis_error("Reply is not a string"));
 
 		return m_str_val;
 	}
@@ -173,7 +174,7 @@ namespace cpp_redis {
 	int64_t
 	reply::as_integer() const {
 		if (!is_integer())
-			throw cpp_redis::redis_error("Reply is not an integer");
+			cpp_redis_throw_raw(cpp_redis::redis_error("Reply is not an integer"));
 
 		return m_int_val;
 	}

@@ -23,6 +23,7 @@
 #include <cpp_redis/core/subscriber.hpp>
 #include <cpp_redis/misc/error.hpp>
 #include <cpp_redis/misc/logger.hpp>
+#include <cpp_redis/misc/macro.hpp>
 
 #include <thread>
 
@@ -82,7 +83,7 @@ subscriber::connect(
     connect(m_redis_server, m_redis_port, connect_callback, timeout_ms, max_reconnects, reconnect_interval_ms);
   }
   else {
-    throw redis_error("cpp_redis::subscriber::connect() could not find master for m_name " + name);
+    cpp_redis_throw_raw(redis_error("cpp_redis::subscriber::connect() could not find master for m_name " + name));
   }
 }
 
