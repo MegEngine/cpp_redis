@@ -76,11 +76,11 @@ sentinel::get_master_addr_by_name(const std::string& name, std::string& host, st
   }
 
   if (autoconnect) {
-    try {
+    cpp_redis_try {
       //! Will round robin all attached sentinels until it finds one that is online.
       connect_sentinel(nullptr);
     }
-    catch (const redis_error&) {
+    cpp_redis_catch (const redis_error&, ) {
     }
 
     //! we failed to connect
@@ -123,11 +123,11 @@ sentinel::connect_sentinel(const sentinel_disconnect_handler_t& sentinel_disconn
   bool not_connected                     = true;
 
   while (not_connected && it != m_sentinels.end()) {
-    try {
+    cpp_redis_try {
       __CPP_REDIS_LOG(debug, std::string("cpp_redis::sentinel attempting to connect to host ") + it->get_host());
       m_client.connect(it->get_host(), it->get_port(), disconnect_handler, receive_handler, it->get_timeout_ms());
     }
-    catch (const redis_error&) {
+    cpp_redis_catch (const redis_error&, ) {
       __CPP_REDIS_LOG(info, std::string("cpp_redis::sentinel unable to connect to sentinel host ") + it->get_host());
     }
 
@@ -274,15 +274,15 @@ sentinel::sync_commit() {
 
 void
 sentinel::try_commit(void) {
-  try {
+  cpp_redis_try {
     __CPP_REDIS_LOG(debug, "cpp_redis::sentinel attempts to send pipelined commands");
     m_client.commit();
     __CPP_REDIS_LOG(info, "cpp_redis::sentinel sent pipelined commands");
   }
-  catch (const cpp_redis::redis_error&) {
+  cpp_redis_catch (const cpp_redis::redis_error&, ) {
     __CPP_REDIS_LOG(error, "cpp_redis::sentinel could not send pipelined commands");
     clear_callbacks();
-    throw;
+    cpp_redis_throw_raw();
   }
 }
 

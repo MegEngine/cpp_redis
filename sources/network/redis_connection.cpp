@@ -58,7 +58,7 @@ namespace cpp_redis {
 		                          const disconnection_handler_t &client_disconnection_handler,
 		                          const reply_callback_t &client_reply_callback,
 		                          std::uint32_t timeout_ms) {
-			try {
+			cpp_redis_try {
 				__CPP_REDIS_LOG(debug, "cpp_redis::network::redis_connection attempts to connect");
 
 /**
@@ -77,7 +77,7 @@ namespace cpp_redis {
 
 				__CPP_REDIS_LOG(debug, "cpp_redis::network::redis_connection connected");
 			}
-			catch (const std::exception &e) {
+			cpp_redis_catch (const std::exception &e, ) {
 				__CPP_REDIS_LOG(error, std::string("cpp_redis::network::redis_connection ") + e.what());
 				cpp_redis_throw_raw(redis_error(e.what()));
 			}
@@ -145,11 +145,11 @@ namespace cpp_redis {
 			__CPP_REDIS_LOG(debug, "cpp_redis::network::redis_connection attempts to send pipelined commands");
 			std::string buffer = std::move(m_buffer);
 
-			try {
+			cpp_redis_try {
 				tcp_client_iface::write_request request = {std::vector<char>{buffer.begin(), buffer.end()}, nullptr};
 				m_client->async_write(request);
 			}
-			catch (const std::exception &e) {
+			cpp_redis_catch (const std::exception &e, ) {
 				__CPP_REDIS_LOG(error, std::string("cpp_redis::network::redis_connection ") + e.what());
 				cpp_redis_throw_raw(redis_error(e.what()));
 			}
@@ -171,11 +171,11 @@ namespace cpp_redis {
 		redis_connection::tcp_client_receive_handler(const tcp_client_iface::read_result &result) {
 			if (!result.success) { return; }
 
-			try {
+			cpp_redis_try {
 				__CPP_REDIS_LOG(debug, "cpp_redis::network::redis_connection receives packet, attempts to build reply");
 				m_builder << std::string(result.buffer.begin(), result.buffer.end());
 			}
-			catch (const redis_error &) {
+			cpp_redis_catch (const redis_error &, ) {
 				__CPP_REDIS_LOG(error,
 				                "cpp_redis::network::redis_connection could not build reply (invalid format), disconnecting");
 				call_disconnection_handler();
@@ -194,13 +194,13 @@ namespace cpp_redis {
 				}
 			}
 
-			try {
+			cpp_redis_try {
 				tcp_client_iface::read_request request = {__CPP_REDIS_READ_SIZE,
 				                                          std::bind(&redis_connection::tcp_client_receive_handler, this,
 				                                                    std::placeholders::_1)};
 				m_client->async_read(request);
 			}
-			catch (const std::exception &) {
+			cpp_redis_catch (const std::exception &, ) {
 /**
  * Client disconnected in the meantime
  */

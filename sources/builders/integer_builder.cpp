@@ -25,6 +25,7 @@
 #include <cpp_redis/builders/integer_builder.hpp>
 #include <cpp_redis/misc/error.hpp>
 #include <cpp_redis/misc/logger.hpp>
+#include <cpp_redis/misc/macro.hpp>
 
 namespace cpp_redis {
 
@@ -53,7 +54,7 @@ integer_builder::operator<<(std::string& buffer) {
     }
     else if (!std::isdigit(buffer[i])) {
       __CPP_REDIS_LOG(error, "cpp_redis::builders::integer_builder receives invalid digit character");
-      throw redis_error("Invalid character for integer redis reply");
+      cpp_redis_throw_raw(redis_error("Invalid character for integer redis reply"));
     }
 
     m_nbr *= 10;

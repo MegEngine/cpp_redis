@@ -233,19 +233,19 @@ namespace cpp_redis {
 
 	void
 	client::try_commit() {
-		try {
+		cpp_redis_try {
 			__CPP_REDIS_LOG(debug, "cpp_redis::client attempts to send pipelined commands");
 			m_client.commit();
 			__CPP_REDIS_LOG(info, "cpp_redis::client sent pipelined commands");
 		}
-		catch (const cpp_redis::redis_error &) {
+        cpp_redis_catch(const cpp_redis::redis_error &, {
 			__CPP_REDIS_LOG(error, "cpp_redis::client could not send pipelined commands");
 			/**
 			 * ensure commands are flushed
 			 */
 			clear_callbacks();
 			throw;
-		}
+        });
 	}
 
 	void
@@ -453,11 +453,11 @@ namespace cpp_redis {
 /**
  * Try catch block because the redis client throws an error if connection cannot be made.
  */
-		try {
+		cpp_redis_try {
 			connect(m_redis_server, m_redis_port, m_connect_callback, m_connect_timeout_ms, m_max_reconnects,
 			        m_reconnect_interval_ms);
 		}
-		catch (...) {
+		cpp_redis_catch (...,) {
 		}
 
 		if (!is_connected()) {

@@ -38,7 +38,11 @@
 #endif
 
 #if CPP_REDIS_ENABLE_EXCEPTION
+#define cpp_redis_try try
+#define cpp_redis_catch(_decl, _stmt) catch (_decl) _stmt
 #define cpp_redis_throw_raw(_exc...) throw _exc
 #else
+#define cpp_redis_try
+#define cpp_redis_catch(_decl, _stmt)
 #define cpp_redis_throw_raw(_exc...) __builtin_trap()
 #endif

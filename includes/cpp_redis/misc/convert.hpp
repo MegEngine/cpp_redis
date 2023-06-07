@@ -24,6 +24,7 @@
 
 #include <sstream>
 #include <cpp_redis/misc/optional.hpp>
+#include <cpp_redis/misc/macro.hpp>
 
 namespace cpp_redis {
 
@@ -31,12 +32,12 @@ namespace cpp_redis {
 	public:
 			template <class T>
 			static enableIf<std::is_convertible<T, std::string>::value, optional_t<int64_t> > to_int(T value) {
-				try {
+				cpp_redis_try {
 					std::stringstream stream(value);
 					int64_t x;
 					stream >> x;
 					return optional_t<int64_t>(x);
-				} catch (std::exception &exc) {
+				} cpp_redis_catch (std::exception &exc,) {
 					return {};
 				}
 			}

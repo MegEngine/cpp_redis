@@ -28,6 +28,7 @@
 #include <cpp_redis/builders/simple_string_builder.hpp>
 #include <cpp_redis/misc/error.hpp>
 #include <cpp_redis/misc/logger.hpp>
+#include <cpp_redis/misc/macro.hpp>
 
 namespace cpp_redis {
 
@@ -48,7 +49,7 @@ create_builder(char id) {
     return std::unique_ptr<array_builder>{new array_builder()};
   default:
     __CPP_REDIS_LOG(error, "cpp_redis::builders::create_builder receives invalid data type");
-    throw redis_error("Invalid data");
+    cpp_redis_throw_raw(redis_error("Invalid data"));
   }
 }
 

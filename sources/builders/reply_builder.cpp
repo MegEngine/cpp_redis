@@ -20,6 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+#include "cpp_redis/misc/macro.hpp"
 #include <cpp_redis/builders/builders_factory.hpp>
 #include <cpp_redis/builders/reply_builder.hpp>
 #include <cpp_redis/misc/error.hpp>
@@ -76,7 +77,7 @@ namespace cpp_redis {
 		const reply &
 		reply_builder::get_front() const {
 			if (!reply_available())
-				throw redis_error("No available reply");
+				cpp_redis_throw_raw(redis_error("No available reply"));
 
 			return m_available_replies.front();
 		}
@@ -84,7 +85,7 @@ namespace cpp_redis {
 		void
 		reply_builder::pop_front() {
 			if (!reply_available())
-				throw redis_error("No available reply");
+				cpp_redis_throw_raw(redis_error("No available reply"));
 
 			m_available_replies.pop_front();
 		}

@@ -267,14 +267,14 @@ subscriber::punsubscribe(const std::string& pattern) {
 
 subscriber&
 subscriber::commit() {
-  try {
+  cpp_redis_try {
     __CPP_REDIS_LOG(debug, "cpp_redis::subscriber attempts to send pipelined commands");
     m_client.commit();
     __CPP_REDIS_LOG(info, "cpp_redis::subscriber sent pipelined commands");
   }
-  catch (const cpp_redis::redis_error&) {
+  cpp_redis_catch (const cpp_redis::redis_error&, ) {
     __CPP_REDIS_LOG(error, "cpp_redis::subscriber could not send pipelined commands");
-    throw;
+    cpp_redis_throw_raw();
   }
 
   return *this;
@@ -485,10 +485,10 @@ subscriber::reconnect() {
   }
 
   //! Try catch block because the redis subscriber throws an error if connection cannot be made.
-  try {
+  cpp_redis_try {
     connect(m_redis_server, m_redis_port, m_connect_callback, m_connect_timeout_ms, m_max_reconnects, m_reconnect_interval_ms);
   }
-  catch (...) {
+  cpp_redis_catch (..., ) {
   }
 
   if (!is_connected()) {
