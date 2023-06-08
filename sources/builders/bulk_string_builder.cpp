@@ -20,6 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+#include "cpp_redis/misc/macro.hpp"
 #include <cpp_redis/builders/bulk_string_builder.hpp>
 #include <cpp_redis/misc/error.hpp>
 #include <cpp_redis/misc/logger.hpp>
@@ -69,7 +70,7 @@ bulk_string_builder::fetch_str(std::string& buffer) {
 
   if (buffer[m_str_size] != '\r' || buffer[m_str_size + 1] != '\n') {
     __CPP_REDIS_LOG(error, "cpp_redis::builders::bulk_string_builder receives invalid ending sequence");
-    throw redis_error("Wrong ending sequence");
+    cpp_redis_throw_raw(redis_error("Wrong ending sequence"));
   }
 
   m_str = buffer.substr(0, m_str_size);

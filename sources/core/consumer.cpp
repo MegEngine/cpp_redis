@@ -111,7 +111,7 @@ namespace cpp_redis {
 									for (auto &m : stream.Messages) {
 										if (m_should_read_pending.load())
 											m_read_id = m.get_id();
-										try {
+										cpp_redis_try {
 											m_dispatch_queue->dispatch(
 													m,
 													[&](const message_type &message) {
@@ -136,7 +136,7 @@ namespace cpp_redis {
 																	}).sync_commit();
 															return response;
 													});
-										} catch (std::exception &exc) {
+										} cpp_redis_catch (std::exception &exc, ) {
 											__CPP_REDIS_LOG(1,
 											                "Processing failed for message id: " + m.get_id() +
 											                "\nDetails: " + exc.what());
